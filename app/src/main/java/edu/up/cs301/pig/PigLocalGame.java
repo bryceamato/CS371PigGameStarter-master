@@ -13,22 +13,32 @@ import android.util.Log;
  * @author Andrew M. Nuxoll, modified by Steven R. Vegdahl
  * @version February 2016
  */
-public class PigLocalGame extends LocalGame {
+public class PigLocalGame extends LocalGame
+{
+    PigGameState state;
 
     /**
      * This ctor creates a new game state
      */
-    public PigLocalGame() {
-        //TODO  You will implement this constructor
+    public PigLocalGame()
+    {
+        state = new PigGameState();
     }
 
     /**
      * can the player with the given id take an action right now?
      */
     @Override
-    protected boolean canMove(int playerIdx) {
-        //TODO  You will implement this method
-        return false;
+    protected boolean canMove(int playerIdx)
+    {
+        if(playerIdx == state.getTurn())
+        {
+            return true;
+        }else
+        {
+            return false;
+        }
+
     }
 
     /**
@@ -37,17 +47,58 @@ public class PigLocalGame extends LocalGame {
      * @return true if the action was taken or false if the action was invalid/illegal.
      */
     @Override
-    protected boolean makeMove(GameAction action) {
-        //TODO  You will implement this method
-        return false;
+    protected boolean makeMove(GameAction action)
+    {
+        if(action instanceof PigHoldAction)
+        {
+            int turn = state.getTurn();
+            if(turn == 0)
+            {
+                int initP0Score = state.getP0Score();
+                int initDie = state.getDieValue();
+                state.setP0Score(initP0Score + initDie);
+                return true;
+            }else
+            {
+                int initP1Score = state.getP1Score();
+                int initDie = state.getDieValue();
+                state.setP1Score(initP1Score + initDie);
+                return true;
+            }
+
+        }else if(action instanceof PigRollAction)
+        {
+            int rand = (int)(Math.random() * 6) + 1;
+            if(rand == 1)
+            {
+                state.setRunningTotal(0);
+                return true;
+            }else
+            {
+                int currRunningTotal = state.getRunningTotal();
+                state.setRunningTotal(currRunningTotal + rand);
+                return true;
+            }
+        }else
+        {
+            return false;
+        }
     }//makeMove
 
     /**
      * send the updated state to a given player
      */
     @Override
-    protected void sendUpdatedStateTo(GamePlayer p) {
-        //TODO  You will implement this method
+    protected void sendUpdatedStateTo(GamePlayer p)
+    {
+        if(state == null)
+        {
+            return;
+        }
+
+        PigGameState stateForPlayer = new PigGameState(state);
+
+        p.sendInfo(stateForPlayer);
     }//sendUpdatedSate
 
     /**
@@ -58,9 +109,20 @@ public class PigLocalGame extends LocalGame {
      * 		game is not over
      */
     @Override
-    protected String checkIfGameOver() {
-        //TODO  You will implement this method
-        return null;
+    protected String checkIfGameOver()
+    {
+        int currP0Score = state.getP0Score();
+        int currP1Score = state.getP1Score();
+        if(currP0Score >= 50)
+        {
+            return "Player 0 is the winner!";
+        }else if(currP1Score >= 50)
+        {
+            return "Player 1 is the winner!";
+        }else
+        {
+            return null;
+        }
     }
 
 }// class PigLocalGame
