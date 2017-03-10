@@ -68,7 +68,7 @@ public class PigLocalGame extends LocalGame
 
         }else if(action instanceof PigRollAction)
         {
-            int rand = (int)(Math.random() * 6) + 1;
+            int rand = (int)((Math.random() * 6) + 1);
             if(rand == 1)
             {
                 state.setRunningTotal(0);
