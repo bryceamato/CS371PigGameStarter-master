@@ -14,6 +14,7 @@ import edu.up.cs301.game.util.Tickable;
  */
 public class PigComputerPlayer extends GameComputerPlayer
 {
+    protected PigGameState state;
     /**
      * ctor does nothing extra
      */
@@ -34,14 +35,15 @@ public class PigComputerPlayer extends GameComputerPlayer
         {
             return;
         }
-        int move = (int)((Math.random() * 2) + 1);
-        if(move == 1)
+        PigGameState p = (PigGameState)info;
+        PigRollAction rollAction = new PigRollAction(this);
+        game.sendAction(rollAction);
+        if(p.getRunningTotal() >= 10)
         {
             PigHoldAction holdAction = new PigHoldAction(this);
             game.sendAction(holdAction);
-        }else if(move == 2)
+        }else
         {
-            PigRollAction rollAction = new PigRollAction(this);
             game.sendAction(rollAction);
         }
     }//receiveInfo

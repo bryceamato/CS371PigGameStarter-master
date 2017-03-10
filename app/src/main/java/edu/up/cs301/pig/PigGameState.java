@@ -23,6 +23,7 @@ public class PigGameState extends GameState
         p0Score = 0;
         p1Score = 0;
         runningTotal = 0;
+        dieValue = 1;
     }
 
     public PigGameState(PigGameState orig)

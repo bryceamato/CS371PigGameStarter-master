@@ -54,15 +54,21 @@ public class PigLocalGame extends LocalGame
             int turn = state.getTurn();
             if(turn == 0)
             {
-                int initP0Score = state.getP0Score();
-                int initDie = state.getDieValue();
-                state.setP0Score(initP0Score + initDie);
+                int initP1Score = state.getP1Score();
+                int total = state.getRunningTotal();
+                state.setP1Score(initP1Score + total);
+                state.setWhoseTurn( 1 - state.getTurn());
+                state.setDieValue(0);
+                state.setRunningTotal(0);
                 return true;
             }else
             {
-                int initP1Score = state.getP1Score();
-                int initDie = state.getDieValue();
-                state.setP1Score(initP1Score + initDie);
+                int initP0Score = state.getP0Score();
+                int total = state.getRunningTotal();
+                state.setP0Score(initP0Score + total);
+                state.setWhoseTurn( 1 - state.getTurn());
+                state.setDieValue(0);
+                state.setRunningTotal(0);
                 return true;
             }
 
@@ -72,11 +78,14 @@ public class PigLocalGame extends LocalGame
             if(rand == 1)
             {
                 state.setRunningTotal(0);
+                state.setDieValue(1);
+                state.setWhoseTurn( 1 - state.getTurn());
                 return true;
             }else
             {
                 int currRunningTotal = state.getRunningTotal();
                 state.setRunningTotal(currRunningTotal + rand);
+                state.setDieValue(rand);
                 return true;
             }
         }else
